@@ -193,10 +193,9 @@ button { font: inherit; color: inherit; }
   backdrop-filter: saturate(140%) blur(12px);
   -webkit-backdrop-filter: saturate(140%) blur(12px);
   border-bottom: 1px solid transparent;
-  transition: border-color 0.3s, transform 0.35s var(--ease);
+  transition: border-color 0.3s;
 }
 .site-header.is-scrolled { border-bottom-color: var(--border); }
-.site-header.is-hidden { transform: translateY(-100%); }
 
 /* Barre de progression de lecture */
 .scroll-progress {

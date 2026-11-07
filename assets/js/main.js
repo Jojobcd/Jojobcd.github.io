@@ -373,23 +373,16 @@
     progress.setAttribute("aria-hidden", "true");
     header.append(progress);
 
-    // Au scroll : ombre, progression, et header masqué quand on descend (réaffiché en remontant)
-    let lastY = scrollY;
+    // Au scroll : bordure du header et barre de progression (le header reste toujours visible)
     let ticking = false;
     const update = () => {
       const y = scrollY;
       header.classList.toggle("is-scrolled", y > 8);
-      if (!reducedMotion && !list.classList.contains("is-open") && Math.abs(y - lastY) > 6) {
-        header.classList.toggle("is-hidden", y > lastY && y > 320);
-        lastY = y;
-      }
-      if (y < 320) header.classList.remove("is-hidden");
       const max = document.documentElement.scrollHeight - innerHeight;
       progress.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max) : 0})`;
       ticking = false;
     };
     addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-    header.addEventListener("focusin", () => header.classList.remove("is-hidden")); // navigation clavier
     update();
 
     // Indicateur qui glisse vers le lien de la section active (desktop)
