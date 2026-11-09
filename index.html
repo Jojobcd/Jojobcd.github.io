@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://formspree.io; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
 
   <!-- SEO -->
   <title>N'dri Konan Jean Jaurès · Développeur Python Full Stack & Data Analyst</title>
@@ -24,16 +26,7 @@
 
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
 
-  <!-- Applique le thème avant l'affichage pour éviter un flash de couleur -->
-  <script>
-    (function () {
-      var t = null;
-      try { t = localStorage.getItem("theme"); } catch (e) {}
-      if (!t) t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-      document.documentElement.dataset.theme = t;
-      document.documentElement.classList.add("js");
-    })();
-  </script>
+  <script src="assets/js/theme.js"></script>
 
   <!-- Polices : Space Grotesk (titres) + Inter (texte) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -158,15 +151,15 @@
         <form class="contact-form reveal" id="contact-form" novalidate>
           <div class="field">
             <label for="f-name">Nom</label>
-            <input id="f-name" name="name" type="text" autocomplete="name" required />
+            <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="100" />
           </div>
           <div class="field">
             <label for="f-email">Email</label>
-            <input id="f-email" name="email" type="email" autocomplete="email" required />
+            <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="150" />
           </div>
           <div class="field">
             <label for="f-message">Message</label>
-            <textarea id="f-message" name="message" rows="5" required></textarea>
+            <textarea id="f-message" name="message" rows="5" required maxlength="5000"></textarea>
           </div>
           <!-- Piège à robots : invisible pour les humains -->
           <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />

@@ -19,6 +19,13 @@
   const esc = (s) =>
     String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
+  // N'accepte que les liens https, http, mailto ou relatifs (bloque javascript:, data:…)
+  const safeUrl = (u) => {
+    const s = String(u ?? "").trim();
+    if (!s) return "";
+    return /^(https?:|mailto:)/i.test(s) || !/^[a-z][a-z0-9+.-]*:/i.test(s) ? s : "";
+  };
+
   const CATEGORY_LABELS = { data: "Data", fullstack: "Full Stack" };
 
   // Icônes SVG (trait, style Feather) — une seule source pour tout le site
@@ -41,7 +48,7 @@
   const icon = (name) => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name] || ""}</svg>`;
 
   const externalLink = (href, label, iconName = "external") =>
-    href
+    (href = safeUrl(href))
       ? `<a class="link-arrow" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${icon(iconName)}${esc(label)}</a>`
       : "";
 
@@ -171,7 +178,7 @@
       <div class="hero-actions reveal" style="--delay:240ms">
         <a class="btn btn-primary btn-nudge-down" href="#projets">Voir mes projets${icon("arrowDown")}</a>
         <a class="btn btn-ghost btn-nudge-right" href="#contact">Me contacter${icon("arrowRight")}</a>
-        ${id.cv ? `<a class="btn btn-ghost" href="${esc(id.cv)}" download>${icon("file")}CV</a>` : ""}
+        ${safeUrl(id.cv) ? `<a class="btn btn-ghost" href="${esc(safeUrl(id.cv))}" download>${icon("file")}CV</a>` : ""}
       </div>
       <div class="hero-stack reveal" style="--delay:300ms">
         <p class="sr-only">Technologies principales :</p>
@@ -289,7 +296,7 @@
       id.email && { href: `mailto:${id.email}`, label: id.email, icon: "mail", ext: false },
       id.linkedin && { href: id.linkedin, label: "LinkedIn", icon: "linkedin", ext: true },
       id.github && { href: id.github, label: "GitHub", icon: "github", ext: true },
-    ].filter(Boolean);
+    ].filter((l) => l && safeUrl(l.href));
     return items
       .map(
         (l) => `<li><a href="${esc(l.href)}"${l.ext ? ' target="_blank" rel="noopener noreferrer"' : ""}>${icon(l.icon)}<span>${esc(l.label)}</span></a></li>`

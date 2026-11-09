@@ -6,8 +6,7 @@
  *  Pour modifier le portfolio, il suffit d'éditer ce fichier :
  *  aucune autre modification n'est nécessaire.
  *
- *  Les champs marqués « À COMPLÉTER » sont vides volontairement :
- *  tant qu'ils restent vides, l'élément correspondant est masqué.
+ *  Un champ laissé vide masque l'élément correspondant.
  *
  *  Seule exception : les balises <meta> (SEO / Open Graph) sont
  *  écrites en dur dans index.html, car les robots ne lisent pas le JS.
@@ -27,8 +26,8 @@ window.PORTFOLIO = {
     heroStack: ["Python", "Pandas", "SQL", "Power BI", "Django", "FastAPI", "React", "PostgreSQL"],
     email: "jjaures077@gmail.com",
     github: "https://github.com/Jojobcd",
-    linkedin: "", // À COMPLÉTER : https://www.linkedin.com/in/...
-    cv: "", // À COMPLÉTER : chemin vers un PDF, ex. "assets/cv-jean-jaures.pdf"
+    linkedin: "",
+    cv: "",
   },
 
   about: {
@@ -155,7 +154,7 @@ window.PORTFOLIO = {
       stack: ["FastAPI", "XGBoost", "SHAP", "Spring Boot", "Angular", "PostgreSQL"],
       links: {
         demo: "https://agricredit-frontend-p510.onrender.com",
-        github: "", // dépôt privé : remettre https://github.com/Jojobcd/agricredit-ai s'il devient public
+        github: "",
       },
     },
     // --- Études de cas en entreprise (code confidentiel) ---
@@ -196,13 +195,12 @@ window.PORTFOLIO = {
         "Convoquer une assemblée, faire voter les résolutions et produire un procès-verbal conforme au droit OHADA reste un processus papier, long et risqué.",
       solution:
         "Plateforme qui couvre tout le cycle de la gouvernance : convocations, votes, résolutions, génération des procès-verbaux et audit de conformité.",
-      // À COMPLÉTER : un chiffre (sociétés clientes, assemblées tenues, temps gagné…)
       result: { value: "Cycle complet", label: "de la convocation au procès-verbal, avec audit de conformité" },
       highlights: [
         "Conception et développement de la plateforme, de la maquette fonctionnelle à la production.",
         "Pilotage des livraisons avec une équipe de 2 développeurs.",
       ],
-      stack: [], // À COMPLÉTER
+      stack: [],
       links: { demo: "", github: "" },
     },
     {
@@ -225,7 +223,7 @@ window.PORTFOLIO = {
         "Mise en service sur 8 sites, utilisée chaque jour par 25 collaborateurs.",
         "Formation et support des utilisateurs après la mise en production.",
       ],
-      stack: [], // À COMPLÉTER : technologies utilisées (ex. "Django", "PostgreSQL")
+      stack: [],
       links: { demo: "", github: "" },
     },
     {
@@ -247,7 +245,7 @@ window.PORTFOLIO = {
         "Formulaires automatisés, accessibles sans application à installer.",
         "Alertes en temps réel pour traiter un mécontentement avant le départ du client.",
       ],
-      stack: [], // À COMPLÉTER
+      stack: [],
       links: { demo: "", github: "" },
     },
     {
@@ -291,7 +289,7 @@ window.PORTFOLIO = {
       highlights: [
         "Préparation des rapports comptables ramenée de plusieurs heures à quelques minutes.",
         "Recherche automatique des soldes manquants.",
-        "Analyse des données comptables ayant contribué, avec la Direction financière et comptable, à identifier un cas de fraude.",
+        "Détection d'anomalies comptables par l'analyse de données, avec la Direction financière et comptable.",
       ],
       stack: ["Python", "Pandas", "Excel"],
       links: { demo: "", github: "" },
@@ -324,7 +322,7 @@ window.PORTFOLIO = {
       id: "gestagri",
       title: "GestAgri",
       subtitle: "Gestion de coopératives agricoles",
-      hidden: true, // masqué pour garder 6 projets ; passer à false pour le réafficher
+      hidden: true,
       categories: ["fullstack"],
       image: "",
       dashboard: true,
@@ -406,7 +404,7 @@ window.PORTFOLIO = {
       ],
       results: [
         "Environ 15 heures économisées par mois.",
-        "Contribution à l'identification d'un cas de fraude.",
+        "Détection d'anomalies comptables par l'analyse de données.",
       ],
     },
   ],
@@ -436,6 +434,6 @@ window.PORTFOLIO = {
     intro:
       "Un projet data, une application à construire ou un poste à pourvoir ? Parlons-en.",
     // Identifiant Formspree (ex. "xyzabcde"). Vide → le formulaire ouvre la messagerie de l'utilisateur.
-    formspreeId: "", // À COMPLÉTER
+    formspreeId: "",
   },
 };
