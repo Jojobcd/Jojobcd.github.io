@@ -33,6 +33,8 @@
     chart: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
     server: '<rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/>',
     layout: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 20V9"/>',
+    code: '<path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>',
+    swap: '<path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',
     tool: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>',
     github: '<path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>',
     linkedin: '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>',
@@ -187,25 +189,50 @@
   }
 
   function About(a) {
+    const count = (f) => PROJECTS.filter((p) => p.categories.includes(f));
+    const profile = (pr, i) => {
+      const list = count(pr.filter);
+      return `
+        <article class="card profile reveal" style="--delay:${i * 90}ms" aria-labelledby="pr-${esc(pr.filter)}">
+          <div class="skill-head"><span class="skill-icon">${icon(pr.icon)}</span><h3 id="pr-${esc(pr.filter)}">${esc(pr.role)}</h3></div>
+          <p class="profile-pitch">${esc(pr.pitch)}</p>
+          <p class="profile-text">${esc(pr.text)}</p>
+          <div>
+            <p class="profile-label">Projets</p>
+            ${chips(list.map((p) => p.title))}
+          </div>
+          <a class="link-arrow profile-link" href="#projets" data-goto-filter="${esc(pr.filter)}">Voir les ${list.length} projets ${esc(pr.role)}${icon("arrowRight")}</a>
+        </article>`;
+    };
     return `
-      <div class="about-grid">
-        <div class="about-text reveal">
-          ${a.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("")}
-          <p class="about-quote">${esc(a.differentiator)}</p>
-        </div>
-        <ol class="approach">
-          ${a.approach
-            .map((s, i) => `<li class="card reveal" style="--delay:${i * 80}ms"><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></li>`)
-            .join("")}
-        </ol>
-      </div>`;
+      <p class="about-intro reveal">${esc(a.intro)}</p>
+      <div class="profiles">${a.profiles.map(profile).join("")}</div>
+      <aside class="card bridge reveal">
+        <div class="skill-head"><span class="skill-icon">${icon("swap")}</span><h3>${esc(a.bridge.title)}</h3></div>
+        <p>${esc(a.bridge.text)}</p>
+        <p class="bridge-example">${esc(a.bridge.example)}</p>
+      </aside>
+      <h3 class="subhead reveal">${esc(a.approachTitle)}</h3>
+      <ol class="approach">
+        ${a.approach
+          .map((s, i) => `<li class="card reveal" style="--delay:${i * 80}ms"><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></li>`)
+          .join("")}
+      </ol>`;
   }
 
   const SkillCard = (s, i) => `
     <article class="card skill-card reveal" style="--delay:${i * 70}ms">
       <div class="skill-head"><span class="skill-icon">${icon(s.icon)}</span><h3>${esc(s.domain)}</h3></div>
-      ${chips(s.items)}
+      ${s.groups
+        .map((g) => `<div class="skill-group">${g.label ? `<p class="profile-label">${esc(g.label)}</p>` : ""}${chips(g.items)}</div>`)
+        .join("")}
     </article>`;
+
+  const SharedTools = (t) => `
+    <div class="card skill-card skills-shared reveal" style="--delay:140ms">
+      <p class="profile-label">${esc(t.label)}</p>
+      ${chips(t.items)}
+    </div>`;
 
   const ProjectCard = (p, i) => `
     <article class="card project-card reveal" style="--delay:${(i % 3) * 70}ms" data-categories="${esc(p.categories.join(" "))}" aria-labelledby="pt-${esc(p.id)}">
@@ -311,7 +338,7 @@
     $$("[data-slot]").forEach((el) => (el.textContent = id[el.dataset.slot] ?? ""));
     $("#hero").innerHTML = Hero(id);
     $("#about").innerHTML = About(D.about);
-    $("#skills").innerHTML = D.skills.map(SkillCard).join("");
+    $("#skills").innerHTML = D.skills.map(SkillCard).join("") + (D.sharedTools ? SharedTools(D.sharedTools) : "");
     $("#projects").innerHTML = PROJECTS.map(ProjectCard).join("");
     $("#timeline").innerHTML = D.experience.map(TimelineItem).join("");
     $("#education").innerHTML = (D.education || []).map(EducationItem).join("");
@@ -452,6 +479,12 @@
     movePill();
     addEventListener("resize", movePill);
     document.fonts?.ready.then(movePill);
+
+    // Boutons « Voir les projets … » des blocs À propos : activent le filtre correspondant
+    document.addEventListener("click", (e) => {
+      const link = e.target.closest("[data-goto-filter]");
+      if (link) buttons.find((b) => b.dataset.filter === link.dataset.gotoFilter)?.click();
+    });
 
     buttons.forEach((btn) =>
       btn.addEventListener("click", () => {

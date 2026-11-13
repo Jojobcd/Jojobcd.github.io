@@ -17,9 +17,9 @@ window.PORTFOLIO = {
     name: "N'dri Konan Jean Jaurès",
     shortName: "Jean Jaurès",
     initials: "NJ",
-    title: "Développeur Python Full Stack & Data Analyst",
+    title: "Data Analyst · Développeur Full Stack",
     tagline:
-      "Data Analyst et Développeur Full Stack, je transforme des données brutes en décisions claires et en applications qui tournent en production.",
+      "Data Analyst et Développeur Full Stack : deux métiers que je maîtrise chacun pleinement. Je peux exercer l'un sans l'autre, ou les combiner quand un projet le demande.",
     location: "Abidjan, Côte d'Ivoire",
     availability: ["Freelance", "CDI", "Remote"],
     // Technologies affichées sous les boutons du hero (8 maximum conseillé)
@@ -31,67 +31,97 @@ window.PORTFOLIO = {
   },
 
   about: {
-    paragraphs: [
-      "J'ai commencé par le développement : un an de stages au Groupe Azalaï Hotels, d'abord à la comptabilité, où j'automatisais les états financiers en Python, puis à la DSI, où j'ai créé deux applications : la gestion des commandes décentralisées, déployée sur 8 sites, et le suivi de la satisfaction client par QR code, qui a recueilli 1 200 réponses en 3 mois. Depuis octobre 2025, je pilote chez Legalis Africa le développement de deux plateformes SaaS : Sankofa, solution juridique, fiscale et comptable pour TPE/PME utilisée par 400 utilisateurs actifs, et AGORA, plateforme de gouvernance d'entreprise pour l'espace OHADA. J'y travaille en freelance depuis juin 2026.",
-      "Côté données, j'ai mené pendant un an une mission de data analyst à distance pour Mecatronix : extraction SQL, nettoyage Python, automatisation VBA et tableaux de bord Power BI pour trois équipes. J'analyse aussi des données d'enquêtes nationales (EDS-CI, EHCVM). Ce double parcours me permet de suivre un sujet de la question métier jusqu'à l'outil livré.",
+    intro:
+      "Je mène deux métiers, chacun avec ses missions, ses outils et ses résultats. Vous pouvez me recruter comme Data Analyst, comme Développeur Full Stack, ou pour un projet qui demande les deux.",
+    // Deux profils autonomes et de même niveau. « filter » relie le bloc au filtre de projets.
+    profiles: [
+      {
+        role: "Data Analyst",
+        icon: "chart",
+        filter: "data",
+        pitch:
+          "Je transforme des données brutes en décisions : extraction SQL, nettoyage Python, statistiques rigoureuses et tableaux de bord utilisés au quotidien.",
+        text:
+          "Pendant un an, j'ai mené une mission de data analyst à distance pour Mecatronix : extraction SQL, nettoyage Python, automatisation VBA et tableaux de bord Power BI pour trois équipes. Auparavant, au service comptable du Groupe Azalaï Hotels, j'ai automatisé les états financiers en Python et détecté des anomalies comptables par l'analyse de données. J'analyse aussi des données d'enquêtes nationales (EDS-CI, EHCVM).",
+      },
+      {
+        role: "Développeur Full Stack",
+        icon: "code",
+        filter: "fullstack",
+        pitch:
+          "Je conçois et je livre des applications web de bout en bout : base de données, API, interface, déploiement et support, jusqu'à la production.",
+        text:
+          "À la DSI du Groupe Azalaï Hotels, j'ai créé deux applications : la gestion des commandes décentralisées, déployée sur 8 sites, et le suivi de la satisfaction client par QR code, qui a recueilli 1 200 réponses en 3 mois. Depuis octobre 2025, je pilote chez Legalis Africa le développement de deux plateformes SaaS : Sankofa, solution juridique, fiscale et comptable pour TPE/PME utilisée par 400 utilisateurs actifs, et AGORA, plateforme de gouvernance d'entreprise pour l'espace OHADA. J'y travaille en freelance depuis juin 2026.",
+      },
     ],
+    bridge: {
+      title: "Et quand un projet demande les deux",
+      text:
+        "Les deux métiers se nourrissent dans les deux sens : une analyse peut devenir une application, et une application produit des données que je sais exploiter.",
+      example:
+        "Exemple : AgriCredit AI, un modèle de scoring (data) livré dans une application web et un canal USSD/SMS (full stack).",
+    },
+    approachTitle: "Une même exigence dans les deux métiers",
     approach: [
       {
         title: "Partir de la question",
-        text: "Avant d'écrire une ligne de code, je formule la décision que l'analyse ou l'application doit éclairer.",
+        text: "Avant une analyse comme avant une application, je formule le besoin réel à servir.",
       },
       {
         title: "Vérifier avant d'affirmer",
-        text: "Pondérations, tests de robustesse, corrections pour tests multiples : un chiffre publié doit tenir à la relecture.",
+        text: "Un chiffre publié doit tenir à la relecture, une application livrée doit tenir en production.",
       },
       {
         title: "Livrer quelque chose qui sert",
-        text: "Un modèle n'a de valeur que s'il est utilisé : je l'intègre dans une application, une API ou un tableau de bord.",
+        text: "Un tableau de bord consulté chaque semaine, une application utilisée chaque jour : je mesure mon travail à son usage réel.",
       },
     ],
-    differentiator:
-      "Ce qui me distingue : je relie la donnée au produit. Je peux analyser un jeu de données, en tirer un modèle explicable, puis construire l'application qui le met entre les mains des utilisateurs.",
   },
 
-  // Compétences regroupées par domaine (pas de pourcentages)
+  // Compétences : une colonne par métier (pas de pourcentages), puis les outils communs
   skills: [
     {
-      domain: "Data",
+      domain: "Data Analyst",
       icon: "chart",
-      items: [
-        "Python (Pandas, NumPy)",
-        "SQL",
-        "Power BI / Tableau",
-        "Excel avancé & VBA",
-        "Visualisation (Plotly, Seaborn)",
-        "Nettoyage & analyse de données",
-        "Statistiques (régression, tests)",
-        "Scikit-learn, XGBoost, SHAP",
+      groups: [
+        {
+          label: "",
+          items: [
+            "Python (Pandas, NumPy)",
+            "SQL",
+            "Power BI / Tableau",
+            "Excel avancé & VBA",
+            "Visualisation (Plotly, Seaborn)",
+            "Nettoyage & analyse de données",
+            "Statistiques (régression, tests)",
+            "Scikit-learn, XGBoost, SHAP",
+          ],
+        },
       ],
     },
     {
-      domain: "Backend",
-      icon: "server",
-      items: [
-        "Python (Django, FastAPI, Flask)",
-        "Java (Java EE, Spring Boot)",
-        "PHP (Laravel)",
-        "Node.js (Express)",
-        "PostgreSQL",
-        "API REST",
+      domain: "Développeur Full Stack",
+      icon: "code",
+      groups: [
+        {
+          label: "Backend",
+          items: [
+            "Python (Django, FastAPI, Flask)",
+            "Java (Java EE, Spring Boot)",
+            "PHP (Laravel)",
+            "Node.js (Express)",
+            "PostgreSQL",
+            "API REST",
+          ],
+        },
+        {
+          label: "Frontend",
+          items: ["JavaScript / TypeScript", "React", "HTML / CSS", "Tailwind CSS"],
+        },
       ],
-    },
-    {
-      domain: "Frontend",
-      icon: "layout",
-      items: ["JavaScript / TypeScript", "React", "HTML / CSS", "Tailwind CSS"],
-    },
-    {
-      domain: "Outils",
-      icon: "tool",
-      items: ["Git & GitHub", "Docker", "Linux"],
     },
   ],
+  sharedTools: { label: "Outils communs", items: ["Git & GitHub", "Docker", "Linux"] },
 
   /**
    * Projets.
@@ -432,7 +462,7 @@ window.PORTFOLIO = {
 
   contact: {
     intro:
-      "Un projet data, une application à construire ou un poste à pourvoir ? Parlons-en.",
+      "Un poste de Data Analyst, un poste de développeur, ou un projet qui demande les deux ? Parlons-en.",
     // Identifiant Formspree (ex. "xyzabcde"). Vide → le formulaire ouvre la messagerie de l'utilisateur.
     formspreeId: "",
   },
