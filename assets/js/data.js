@@ -167,7 +167,8 @@ window.PORTFOLIO = {
       title: "AgriCredit AI",
       subtitle: "Scoring de risque de crédit agricole",
       categories: ["fullstack", "data"],
-      image: "",
+      image: "assets/img/agricredit.webp",
+      imageAlt: "Page d'accueil d'AgriCredit AI : plateforme d'aide à la décision de crédit agricole",
       cover: "chart",
       dashboard: true,
       problem:
@@ -195,7 +196,8 @@ window.PORTFOLIO = {
       context: "Legalis Africa · 2025-2026",
       confidential: true,
       categories: ["fullstack"],
-      image: "",
+      image: "assets/img/sankofa.webp",
+      imageAlt: "Page d'accueil de Sankofa by Legalis Africa, legaltech et taxtech",
       cover: "app",
       dashboard: true,
       problem:
