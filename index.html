@@ -10,7 +10,7 @@
   <title>N'dri Konan Jean Jaurès · Data Analyst & Développeur Full Stack</title>
   <meta name="description" content="Data Analyst et Développeur Full Stack à Abidjan : deux métiers maîtrisés, exercés séparément ou ensemble. Disponible en freelance, CDI ou remote." />
   <meta name="author" content="N'dri Konan Jean Jaurès" />
-  <meta name="theme-color" content="#0B0B0F" />
+  <meta name="theme-color" content="#0A0B10" />
   <link rel="canonical" href="https://jojobcd.github.io/" />
 
   <!-- Open Graph / réseaux sociaux -->
@@ -28,10 +28,10 @@
 
   <script src="assets/js/theme.js"></script>
 
-  <!-- Polices : Space Grotesk (titres) + Inter (texte) -->
+  <!-- Polices : Space Grotesk (titres) + Inter (texte) + JetBrains Mono (touches techniques) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="assets/css/styles.css" />
   <script src="assets/js/data.js" defer></script>
@@ -47,6 +47,13 @@
         <span class="brand-mark" data-slot="initials">NJ</span>
         <span class="brand-name" data-slot="shortName"></span>
       </a>
+
+      <!-- Sélecteur de profil : change la couleur du site et met en avant un métier -->
+      <div class="lens" role="group" aria-label="Profil affiché" id="lens">
+        <button type="button" class="lens-btn" data-set-lens="data" aria-pressed="false">Data</button>
+        <button type="button" class="lens-btn" data-set-lens="both" aria-pressed="true">Les deux</button>
+        <button type="button" class="lens-btn" data-set-lens="dev" aria-pressed="false">Dev</button>
+      </div>
 
       <nav class="nav" aria-label="Navigation principale">
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-list">

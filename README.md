@@ -9,6 +9,8 @@ Développeur Python Full Stack & Data Analyst · Abidjan, Côte d'Ivoire
 Site une page en HTML, CSS et JavaScript natifs, sans framework ni étape de build.
 
 - Tout le contenu (textes, projets, expérience) vient d'un seul fichier de données : `assets/js/data.js`.
+- Accueil « double face » (Data Analyst / Développeur Full Stack) et sélecteur de profil : `?vue=data` ou `?vue=dev` ouvre directement le bon profil.
+- Animations limitées à l'opacité et aux transformations, mises en pause hors écran : 60 images/s sur mobile.
 - Thème clair et sombre, navigation qui suit la section active, projets filtrables avec une fenêtre de détail.
 - Accessibilité : navigation au clavier, `<dialog>` natif, et respect de `prefers-reduced-motion`.
 - Sécurité : Content Security Policy stricte sur les scripts, échappement de tout le contenu injecté et filtrage des liens.

@@ -22,12 +22,46 @@ window.PORTFOLIO = {
       "Data Analyst et Développeur Full Stack : deux métiers que je maîtrise chacun pleinement. Je peux exercer l'un sans l'autre, ou les combiner quand un projet le demande.",
     location: "Abidjan, Côte d'Ivoire",
     availability: ["Freelance", "CDI", "Remote"],
-    // Technologies affichées sous les boutons du hero (8 maximum conseillé)
-    heroStack: ["Python", "Pandas", "SQL", "Power BI", "Django", "FastAPI", "React", "PostgreSQL"],
     email: "jjaures077@gmail.com",
     github: "https://github.com/Jojobcd",
     linkedin: "",
     cv: "",
+  },
+
+  /**
+   * Accueil « double face » : un panneau par métier.
+   * Les chiffres viennent des projets et expériences ci-dessous.
+   */
+  hero: {
+    data: {
+      label: "Data Analyst",
+      pitch: "Des données brutes aux décisions.",
+      metrics: [
+        { value: "4 h → 5 min", label: "reporting mensuel" },
+        { value: "AUC 0,84", label: "modèle de pauvreté" },
+        { value: "500 000+", label: "lignes consolidées" },
+      ],
+      stack: ["Python", "Pandas", "SQL", "Power BI"],
+      cta: "Voir le profil Data",
+    },
+    dev: {
+      label: "Développeur Full Stack",
+      pitch: "Des applications livrées en production.",
+      metrics: [
+        { value: "8 sites", label: "équipés d'une même application" },
+        { value: "400", label: "utilisateurs actifs" },
+        { value: "1 200", label: "réponses clients en 3 mois" },
+      ],
+      // Lignes du terminal animé : "$" = commande, "ok" = résultat
+      terminal: [
+        ["$", "git push origin main"],
+        ["ok", "tests passés"],
+        ["$", "deploy --prod"],
+        ["ok", "en production"],
+      ],
+      stack: ["Django", "FastAPI", "React", "PostgreSQL"],
+      cta: "Voir le profil Dev",
+    },
   },
 
   about: {
@@ -82,6 +116,7 @@ window.PORTFOLIO = {
   skills: [
     {
       domain: "Data Analyst",
+      key: "data",
       icon: "chart",
       groups: [
         {
@@ -101,6 +136,7 @@ window.PORTFOLIO = {
     },
     {
       domain: "Développeur Full Stack",
+      key: "dev",
       icon: "code",
       groups: [
         {
@@ -376,6 +412,7 @@ window.PORTFOLIO = {
   experience: [
     {
       role: "Développeur chef de projet",
+      domain: "dev",
       context: "Legalis Africa · Abidjan · en freelance depuis juin 2026",
       period: "oct. 2025 — aujourd'hui",
       duration: "",
@@ -392,6 +429,7 @@ window.PORTFOLIO = {
     },
     {
       role: "Data Analyst",
+      domain: "data",
       context: "Mecatronix · Abidjan · Mission à distance",
       period: "juin 2025 — juin 2026",
       duration: "1 an",
@@ -409,6 +447,7 @@ window.PORTFOLIO = {
     },
     {
       role: "Stagiaire Développeur Full Stack",
+      domain: "dev",
       context: "Salam Management Services / Groupe Azalaï Hotels · DSI · Marcory",
       period: "janv. 2025 — juin 2025",
       duration: "6 mois",
@@ -426,6 +465,7 @@ window.PORTFOLIO = {
     },
     {
       role: "Stagiaire Développeur Python",
+      domain: "data",
       context: "Salam Management Services / Groupe Azalaï Hotels · Direction Finance · Marcory",
       period: "juin 2024 — janv. 2025",
       duration: "7 mois",
@@ -455,8 +495,8 @@ window.PORTFOLIO = {
    *            → calculé automatiquement depuis la liste ci-dessus
    */
   stats: [
-    { value: 2, suffix: " ans", label: "en développement full stack" },
-    { value: 1, suffix: " an", label: "en analyse de données" },
+    { value: 2, suffix: " ans", label: "en développement full stack", domain: "dev" },
+    { value: 1, suffix: " an", label: "en analyse de données", domain: "data" },
     { from: "projects", label: "projets livrés" },
     // + 5 : les 6 tableaux Power BI de Mecatronix comptent pour 6, mais leur carte projet en compte déjà 1
     { from: "dashboards", plus: 5, label: "tableaux de bord créés" },

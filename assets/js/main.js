@@ -170,21 +170,82 @@
 
   /* ---------- Composants de section ---------- */
 
-  function Hero(id) {
+  // Domaine d'un projet : data, dev, ou les deux
+  const projectDomain = (p) =>
+    p.categories.includes("data") && p.categories.includes("fullstack") ? "both" : p.categories.includes("data") ? "data" : "dev";
+  const DOMAIN_LABEL = { data: "Data", dev: "Dev" };
+
+  // Mini graphique du panneau Data : barres qui montent + courbe qui se dessine
+  function DataViz() {
+    const hs = [34, 48, 42, 62, 58, 84, 104];
+    const pts = hs.map((h, i) => [22 + i * 44, 128 - h]);
+    const bars = hs
+      .map((h, i) => `<rect class="viz-bar" style="--b:${i}" x="${10 + i * 44}" y="${128 - h}" width="24" height="${h}" rx="4"/>`)
+      .join("");
+    const d = "M" + pts.map((p) => p.join(" ")).join(" L");
+    const [lx, ly] = pts[pts.length - 1];
+    return `<svg class="viz" viewBox="0 0 310 136" aria-hidden="true" focusable="false">
+      <path class="viz-grid" d="M0 32H310M0 64H310M0 96H310"/>
+      <line class="viz-axis" x1="0" y1="128.5" x2="310" y2="128.5"/>
+      ${bars}
+      <path class="viz-line" pathLength="1" d="${d}"/>
+      <circle class="viz-halo" cx="${lx}" cy="${ly}" r="10"/>
+      <circle class="viz-dot" cx="${lx}" cy="${ly}" r="4.5"/>
+    </svg>`;
+  }
+
+  // Terminal du panneau Dev : les commandes s'écrivent, les résultats apparaissent
+  function Terminal(lines) {
+    const label = "Terminal : " + lines.map((l) => l[1]).join(", ");
+    return `<div class="term" role="img" aria-label="${esc(label)}">
+      <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>~/production</span></div>
+      <ol class="term-body" aria-hidden="true">
+        ${lines
+          .map(([k, t], i) =>
+            k === "$"
+              ? `<li class="t-line t-cmd" style="--t:${i};--n:${t.length}"><span class="t-prompt">$</span><span class="t-text">${esc(t)}</span></li>`
+              : `<li class="t-line t-ok" style="--t:${i}"><span class="t-prompt">✓</span><span class="t-text">${esc(t)}</span></li>`
+          )
+          .join("")}
+        <li class="t-line t-idle" style="--t:${lines.length}"><span class="t-prompt">$</span><span class="caret"></span></li>
+      </ol>
+    </div>`;
+  }
+
+  function Face(key, f, visualHTML, n) {
     return `
-      <p class="status reveal"><span class="status-dot" aria-hidden="true"></span>
-        <span>${esc(id.location)} · Disponible : ${esc(id.availability.join(", "))}</span></p>
-      <h1 id="hero-title" class="hero-name">${words(id.name)}</h1>
-      <p class="hero-title reveal" style="--delay:120ms">${esc(id.title)}</p>
-      <p class="hero-tagline reveal" style="--delay:180ms">${esc(id.tagline)}</p>
-      <div class="hero-actions reveal" style="--delay:240ms">
-        <a class="btn btn-primary btn-nudge-down" href="#projets">Voir mes projets${icon("arrowDown")}</a>
-        <a class="btn btn-ghost btn-nudge-right" href="#contact">Me contacter${icon("arrowRight")}</a>
-        ${safeUrl(id.cv) ? `<a class="btn btn-ghost" href="${esc(safeUrl(id.cv))}" download>${icon("file")}CV</a>` : ""}
+      <article class="face face--${key}" data-domain="${key}" aria-labelledby="face-${key}-title">
+        <p class="face-kicker"><span>${n}</span>${esc(DOMAIN_LABEL[key])}</p>
+        <h2 class="face-title" id="face-${key}-title">${esc(f.label)}</h2>
+        <p class="face-pitch">${esc(f.pitch)}</p>
+        <div class="face-visual">${visualHTML}</div>
+        <ul class="face-metrics">
+          ${f.metrics.map((m) => `<li><strong>${esc(m.value)}</strong><span>${esc(m.label)}</span></li>`).join("")}
+        </ul>
+        ${chips(f.stack)}
+        <a class="face-cta" href="#a-propos" data-set-lens="${key}">${esc(f.cta)}${icon("arrowRight")}</a>
+      </article>`;
+  }
+
+  function Hero(id, h) {
+    return `
+      <div class="hero-intro">
+        <p class="status reveal"><span class="status-dot" aria-hidden="true"></span>
+          <span>${esc(id.location)} · Disponible : ${esc(id.availability.join(", "))}</span></p>
+        <h1 id="hero-title" class="hero-name">${words(id.name)}</h1>
+        <p class="hero-tagline reveal" style="--delay:160ms">${esc(id.tagline)}</p>
+        <div class="hero-actions reveal" style="--delay:220ms">
+          <a class="btn btn-primary btn-nudge-right" href="#contact">Me contacter${icon("arrowRight")}</a>
+          ${safeUrl(id.cv) ? `<a class="btn btn-ghost" href="${esc(safeUrl(id.cv))}" download>${icon("file")}CV</a>` : ""}
+        </div>
       </div>
-      <div class="hero-stack reveal" style="--delay:300ms">
-        <p class="sr-only">Technologies principales :</p>
-        ${chips(id.heroStack || [])}
+      <div class="duo">
+        ${Face("data", h.data, DataViz(), "01")}
+        <div class="duo-mid">
+          <button class="duo-both" type="button" data-set-lens="both" aria-label="Afficher les deux profils">${icon("swap")}</button>
+          <span>ou les deux</span>
+        </div>
+        ${Face("dev", h.dev, Terminal(h.dev.terminal), "02")}
       </div>`;
   }
 
@@ -193,7 +254,7 @@
     const profile = (pr, i) => {
       const list = count(pr.filter);
       return `
-        <article class="card profile reveal" style="--delay:${i * 90}ms" aria-labelledby="pr-${esc(pr.filter)}">
+        <article class="card profile reveal" style="--delay:${i * 90}ms" data-domain="${pr.filter === "data" ? "data" : "dev"}" aria-labelledby="pr-${esc(pr.filter)}">
           <div class="skill-head"><span class="skill-icon">${icon(pr.icon)}</span><h3 id="pr-${esc(pr.filter)}">${esc(pr.role)}</h3></div>
           <p class="profile-pitch">${esc(pr.pitch)}</p>
           <p class="profile-text">${esc(pr.text)}</p>
@@ -201,7 +262,7 @@
             <p class="profile-label">Projets</p>
             ${chips(list.map((p) => p.title))}
           </div>
-          <a class="link-arrow profile-link" href="#projets" data-goto-filter="${esc(pr.filter)}">Voir les ${list.length} projets ${esc(pr.role)}${icon("arrowRight")}</a>
+          <a class="link-arrow profile-link" href="#projets" data-set-lens="${pr.filter === "data" ? "data" : "dev"}">Voir les ${list.length} projets ${esc(pr.role)}${icon("arrowRight")}</a>
         </article>`;
     };
     return `
@@ -221,7 +282,7 @@
   }
 
   const SkillCard = (s, i) => `
-    <article class="card skill-card reveal" style="--delay:${i * 70}ms">
+    <article class="card skill-card reveal" style="--delay:${i * 70}ms" data-domain="${esc(s.key || "")}">
       <div class="skill-head"><span class="skill-icon">${icon(s.icon)}</span><h3>${esc(s.domain)}</h3></div>
       ${s.groups
         .map((g) => `<div class="skill-group">${g.label ? `<p class="profile-label">${esc(g.label)}</p>` : ""}${chips(g.items)}</div>`)
@@ -235,10 +296,10 @@
     </div>`;
 
   const ProjectCard = (p, i) => `
-    <article class="card project-card reveal" style="--delay:${(i % 3) * 70}ms" data-categories="${esc(p.categories.join(" "))}" aria-labelledby="pt-${esc(p.id)}">
+    <article class="card project-card reveal" style="--delay:${(i % 3) * 70}ms" data-categories="${esc(p.categories.join(" "))}" data-domain="${projectDomain(p)}" aria-labelledby="pt-${esc(p.id)}">
       <div class="project-visual">${visual(p)}</div>
       <div class="project-body">
-        <div class="project-tags">${p.categories.map((c) => `<span class="tag">${esc(CATEGORY_LABELS[c] || c)}</span>`).join("")}</div>
+        <div class="project-tags">${p.categories.map((c) => `<span class="tag tag--${esc(c)}">${esc(CATEGORY_LABELS[c] || c)}</span>`).join("")}</div>
         <div>
           <h3 id="pt-${esc(p.id)}">${esc(p.title)}</h3>
           <p class="project-subtitle">${esc(p.subtitle)}</p>
@@ -263,7 +324,7 @@
       <div class="modal-body">
         <div class="modal-head">
           <div>
-            <div class="project-tags">${p.categories.map((c) => `<span class="tag">${esc(CATEGORY_LABELS[c] || c)}</span>`).join("")}</div>
+            <div class="project-tags">${p.categories.map((c) => `<span class="tag tag--${esc(c)}">${esc(CATEGORY_LABELS[c] || c)}</span>`).join("")}</div>
             <h2 id="modal-title">${esc(p.title)}</h2>
             <p class="project-subtitle">${esc(p.subtitle)}</p>
             ${p.context ? `<p class="project-context">${esc(p.context)}</p>` : ""}
@@ -285,9 +346,9 @@
   }
 
   const TimelineItem = (x, i) => `
-    <li class="card timeline-item reveal" style="--delay:${i * 80}ms">
+    <li class="card timeline-item reveal" style="--delay:${i * 80}ms" data-domain="${esc(x.domain || "")}">
       <div>
-        <h3>${esc(x.role)}</h3>
+        <h3>${x.domain ? `<span class="domain-badge">${esc(DOMAIN_LABEL[x.domain])}</span>` : ""}${esc(x.role)}</h3>
         <p class="timeline-meta"><span>${esc(x.context)}</span><span>${esc(x.period)}</span>${x.duration ? `<span class="duration">${esc(x.duration)}</span>` : ""}</p>
       </div>
       <div class="timeline-cols">
@@ -313,7 +374,7 @@
   }
 
   const StatItem = (s, i) => `
-    <li class="stat reveal" style="--delay:${i * 70}ms">
+    <li class="stat reveal" style="--delay:${i * 70}ms" data-domain="${esc(s.domain || "")}">
       <span class="stat-value" data-count="${statValue(s)}" data-suffix="${esc(s.suffix || "")}">${statValue(s)}${esc(s.suffix || "")}</span>
       <span class="stat-label">${esc(s.label)}</span>
     </li>`;
@@ -336,7 +397,7 @@
   function render() {
     const id = D.identity;
     $$("[data-slot]").forEach((el) => (el.textContent = id[el.dataset.slot] ?? ""));
-    $("#hero").innerHTML = Hero(id);
+    $("#hero").innerHTML = Hero(id, D.hero);
     $("#about").innerHTML = About(D.about);
     $("#skills").innerHTML = D.skills.map(SkillCard).join("") + (D.sharedTools ? SharedTools(D.sharedTools) : "");
     $("#projects").innerHTML = PROJECTS.map(ProjectCard).join("");
@@ -369,7 +430,11 @@
         const b = btn.getBoundingClientRect();
         const x = b.left + b.width / 2, y = b.top + b.height / 2;
         const r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-        document.startViewTransition(() => apply(next)).ready.then(() =>
+        const root = document.documentElement;
+        root.classList.add("vt-theme");
+        const vt = document.startViewTransition(() => apply(next));
+        vt.finished.finally(() => root.classList.remove("vt-theme"));
+        vt.ready.then(() =>
           document.documentElement.animate(
             { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
             { duration: 550, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)", pseudoElement: "::view-transition-new(root)" }
@@ -451,64 +516,98 @@
     $$("main section[id]").forEach((s) => io.observe(s));
   }
 
-  /* ---------- Filtres de projets ---------- */
+  /* ---------- Profil affiché (Data · Les deux · Dev) + filtres de projets ---------- */
 
-  function setupFilters() {
-    const buttons = $$("#filters .filter");
+  // Pastille qui glisse sous le bouton actif d'un groupe
+  function slidingPill(group, buttons) {
+    const pill = document.createElement("span");
+    pill.className = "pill";
+    pill.setAttribute("aria-hidden", "true");
+    group.prepend(pill);
+    group.classList.add("has-pill");
+    const move = () => {
+      const b = buttons.find((x) => x.getAttribute("aria-pressed") === "true");
+      if (!b || !b.offsetWidth) return;
+      pill.style.width = `${b.offsetWidth}px`;
+      pill.style.transform = `translateX(${b.offsetLeft - 4}px)`; // 4px = padding du groupe
+    };
+    addEventListener("resize", move);
+    document.fonts?.ready.then(move);
+    return move;
+  }
+
+  function setupLens() {
+    const root = document.documentElement;
+    const LENS_FILTER = { both: "all", data: "data", dev: "fullstack" };
+    const FILTER_LENS = { all: "both", data: "data", fullstack: "dev" };
+
+    const filterBtns = $$("#filters .filter");
+    const lensBtns = $$("#lens .lens-btn");
     const cards = $$(".project-card");
     const status = $("#filter-status");
 
     // Nombre exact de projets par filtre, calculé depuis les données
     const count = (f) => (f === "all" ? PROJECTS.length : PROJECTS.filter((p) => p.categories.includes(f)).length);
-    buttons.forEach((b) =>
-      b.insertAdjacentHTML("beforeend", ` <span class="filter-count">${count(b.dataset.filter)}</span>`)
-    );
+    filterBtns.forEach((b) => b.insertAdjacentHTML("beforeend", ` <span class="filter-count">${count(b.dataset.filter)}</span>`));
 
-    // Pastille qui glisse sous le filtre sélectionné
-    const group = $("#filters");
-    const pill = document.createElement("span");
-    pill.className = "filter-pill";
-    pill.setAttribute("aria-hidden", "true");
-    group.prepend(pill);
-    group.classList.add("has-pill");
-    const movePill = () => {
-      const b = buttons.find((x) => x.getAttribute("aria-pressed") === "true");
-      pill.style.width = `${b.offsetWidth}px`;
-      pill.style.transform = `translateX(${b.offsetLeft - 4}px)`; // 4px = padding du groupe
-    };
-    movePill();
-    addEventListener("resize", movePill);
-    document.fonts?.ready.then(movePill);
+    const moveFilterPill = slidingPill($("#filters"), filterBtns);
+    const moveLensPill = slidingPill($("#lens"), lensBtns);
 
-    // Boutons « Voir les projets … » des blocs À propos : activent le filtre correspondant
+    function filterCards(f, animate) {
+      let shown = 0;
+      cards.forEach((c) => {
+        const match = f === "all" || c.dataset.categories.split(" ").includes(f);
+        c.hidden = !match;
+        if (!match) return;
+        if (animate && !reducedMotion) {
+          // Relance l'animation d'entrée, en cascade
+          c.classList.add("is-visible");
+          c.classList.remove("card-in");
+          void c.offsetWidth;
+          c.style.setProperty("--k", shown);
+          c.classList.add("card-in");
+        }
+        shown++;
+      });
+      status.textContent = `${shown} projet${shown > 1 ? "s" : ""} affiché${shown > 1 ? "s" : ""}`;
+    }
+
+    function apply(lens, animateCards) {
+      root.dataset.lens = lens;
+      const f = LENS_FILTER[lens];
+      lensBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setLens === lens)));
+      filterBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.filter === f)));
+      moveLensPill();
+      moveFilterPill();
+      filterCards(f, animateCards);
+      // Lien partageable : ?vue=data ou ?vue=dev
+      try {
+        history.replaceState(null, "", (lens === "both" ? location.pathname : `?vue=${lens}`) + location.hash);
+      } catch (e) { /* sans conséquence */ }
+    }
+
+    function setLens(lens, { transition = true } = {}) {
+      if (!LENS_FILTER[lens]) return;
+      if (lens === root.dataset.lens) return;
+      // Fondu enchaîné de la page (View Transitions), sinon changement direct
+      if (transition && document.startViewTransition && !reducedMotion) {
+        root.classList.add("vt-lens");
+        const vt = document.startViewTransition(() => apply(lens, false));
+        vt.finished.finally(() => root.classList.remove("vt-lens"));
+      } else {
+        apply(lens, true);
+      }
+    }
+
     document.addEventListener("click", (e) => {
-      const link = e.target.closest("[data-goto-filter]");
-      if (link) buttons.find((b) => b.dataset.filter === link.dataset.gotoFilter)?.click();
+      const el = e.target.closest("[data-set-lens], #filters .filter");
+      if (!el) return;
+      const lens = el.dataset.setLens || FILTER_LENS[el.dataset.filter];
+      // Un lien qui fait défiler la page : pas de fondu (la page bouge déjà)
+      setLens(lens, { transition: !el.matches("a[href]") });
     });
 
-    buttons.forEach((btn) =>
-      btn.addEventListener("click", () => {
-        const f = btn.dataset.filter;
-        buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
-        movePill();
-        let shown = 0;
-        cards.forEach((c) => {
-          const match = f === "all" || c.dataset.categories.split(" ").includes(f);
-          c.hidden = !match;
-          if (!match) return;
-          c.classList.add("is-visible");
-          if (!reducedMotion) {
-            // Relance l'animation d'entrée, en cascade
-            c.classList.remove("card-in");
-            void c.offsetWidth;
-            c.style.setProperty("--k", shown);
-            c.classList.add("card-in");
-          }
-          shown++;
-        });
-        status.textContent = `${shown} projet${shown > 1 ? "s" : ""} affiché${shown > 1 ? "s" : ""}`;
-      })
-    );
+    apply(LENS_FILTER[root.dataset.lens] ? root.dataset.lens : "both", false);
   }
 
   /* ---------- Modale de détail ---------- */
@@ -600,6 +699,10 @@
 
   function setupMotion() {
     if (reducedMotion) return;
+
+    // Les animations en boucle du hero se mettent en pause quand il sort de l'écran
+    const hero = $("#accueil");
+    new IntersectionObserver(([e]) => hero.classList.toggle("is-offscreen", !e.isIntersecting)).observe(hero);
 
     // Halo qui suit la souris sur le contour des cartes projet
     if (matchMedia("(hover: hover)").matches) {
@@ -706,7 +809,7 @@
   render();
   setupTheme();
   setupNav();
-  setupFilters();
+  setupLens();
   setupModal();
   setupReveal();
   setupCounters();
